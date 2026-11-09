@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abrir WhatsApp</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💬</text></svg>">
+<style>
+:root{--bg:#eef3ee;--ink:#12201a;--muted:#5b6b62;--line:#b9c7bd;--accent:#1d8a4e;--on:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1a14;--ink:#e8f1ea;--muted:#93a69a;--line:#2d4236;--accent:#3ec27a;--on:#08140d}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;align-items:center;justify-content:center;padding:20px}
+main{width:100%;max-width:420px}
+h1{font-size:1.1rem;font-weight:600;margin:0 0 20px;color:var(--muted)}
+input{width:100%;font:inherit;font-size:1.9rem;font-variant-numeric:tabular-nums;letter-spacing:.01em;background:transparent;color:var(--ink);border:0;border-bottom:2px solid var(--line);padding:10px 0;outline:none;border-radius:0}
+input:focus{border-bottom-color:var(--accent)}
+input::placeholder{color:var(--line)}
+button{margin-top:24px;width:100%;font:inherit;font-size:1.1rem;font-weight:600;background:var(--accent);color:var(--on);border:0;border-radius:10px;padding:16px;cursor:pointer}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+button:disabled{opacity:.4;cursor:default}
+p{margin:14px 0 0;font-size:.9rem;color:var(--muted);min-height:1.4em}
+</style>
+</head>
+<body>
+<main>
+  <h1>Abrir conversa no WhatsApp</h1>
+  <input id="n" type="tel" inputmode="tel" autocomplete="off" autofocus placeholder="(51) 99999-8888" aria-label="Número de telefone">
+  <button id="go" disabled>Abrir conversa</button>
+  <p id="info">Pode colar o número com espaços, traços ou parênteses.</p>
+</main>
+<script>
+const n=document.getElementById('n'),go=document.getElementById('go'),info=document.getElementById('info');
+function normalizar(v){
+  let d=v.replace(/\D/g,'').replace(/^0+/,'');
+  if(d.length===10||d.length===11) d='55'+d;
+  return d;
+}
+function atualizar(){
+  const d=normalizar(n.value);
+  const ok=d.length>=12&&d.length<=15;
+  go.disabled=!ok;
+  info.textContent=ok?'Vai abrir: +'+d:(n.value?'Número incompleto. Use DDD + número.':'Pode colar o número com espaços, traços ou parênteses.');
+}
+function abrir(){
+  const d=normalizar(n.value);
+  if(d.length>=12&&d.length<=15) window.location.href='https://wa.me/'+d;
+}
+n.addEventListener('input',atualizar);
+n.addEventListener('keydown',e=>{if(e.key==='Enter')abrir()});
+go.addEventListener('click',abrir);
+atualizar();
+</script>
+</body>
+</html>
